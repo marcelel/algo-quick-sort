@@ -66,18 +66,18 @@ int main() {
         printf("\n");
     }
 
-//    printf("\nSorting with QuickSort");
-//    fflush(stdout);
-//    startTime = clock();
-//    quickSort(arr1, 0, lenArr - 1);
-//    stopTime = clock();
-//
-//    if (lenArr <= maxNumbersDisplayed) {
-//        for (i = 0; i < lenArr; i++) {
-//            printf("%d ", arr1[i]);
-//        }
-//    }
-//    printf("\nSorted in (aprox.): %f seconds \n\n", (double) (stopTime - startTime) / CLOCKS_PER_SEC);
+    printf("\nSorting with QuickSort");
+    fflush(stdout);
+    startTime = clock();
+    quickSort(arr1, 0, lenArr - 1);
+    stopTime = clock();
+
+    if (lenArr <= maxNumbersDisplayed) {
+        for (i = 0; i < lenArr; i++) {
+            printf("%d ", arr1[i]);
+        }
+    }
+    printf("\nSorted in (aprox.): %f seconds \n\n", (double) (stopTime - startTime) / CLOCKS_PER_SEC);
 
     printf("\nSorting with parallel QuickSort");
     fflush(stdout);
@@ -99,9 +99,9 @@ void quickSort_parallel(int *array, int lenArray, int numThreads) {
 
     int cutoff = 100000000;
 
-    #pragma omp parallel num_threads(1)
+#pragma omp parallel num_threads(1)
     {
-        #pragma omp single nowait
+#pragma omp single nowait
         {
             quickSort_parallel_internal(array, 0, lenArray - 1, cutoff);
         }
@@ -136,17 +136,13 @@ void quickSort_parallel_internal(int *array, int left, int right, int cutoff) {
             quickSort_parallel_internal(array, i, right, cutoff);
         }
     } else {
-        #pragma omp task
+#pragma omp task
         {
-            cout << "split" << endl;
             quickSort_parallel_internal(array, left, j, cutoff);
         }
-        #pragma omp task
+#pragma omp task
         {
-            cout << "split" << endl;
             quickSort_parallel_internal(array, i, right, cutoff);
         }
-        cout << "proceed" << endl;
-
     }
 }
